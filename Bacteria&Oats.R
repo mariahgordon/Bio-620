@@ -1,11 +1,12 @@
 #Mariah
 #Data Exploration
 library(ggplot2)
+library(dplyr)
 
 df<-read.csv("Roxs - Sheet1.csv", header = TRUE)
 df$Date <- as.Date(df$Date, format = "%m/%d/%y")
 
-
+#my error graph , to much data
 ggplot(df, aes(x = Date, y = P4..ng.ml.)) +
   geom_point() +
   geom_line() +
@@ -21,7 +22,6 @@ ggplot(df, aes(x = Date, y = P4..ng.ml.)) +
   theme_minimal()
 
 
-
 elephant_data <- elephant_data %>%
   arrange(Date) %>%
   mutate(
@@ -29,14 +29,6 @@ elephant_data <- elephant_data %>%
     group = cumsum(ifelse(is.na(gap) | gap > 60, 1, 0))
   )
 elephant_data <- elephant_data %>%
-  arrange(Date) %>%
-  mutate(
-    gap = as.numeric(Date - lag(Date))
-  )
-
-library(dplyr)
-
-df <- df %>%
   arrange(Date) %>%
   mutate(
     gap = as.numeric(Date - lag(Date))
@@ -70,6 +62,7 @@ ggplot(df, aes(x = Date, y = P4..ng.ml.)) +
     )
   )
 
+#lh and dates not signifcant preds.
 lm(P4..ng.ml. ~ Date + LH..pg.well., data = df)
 
 
