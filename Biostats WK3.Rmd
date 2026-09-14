@@ -1,0 +1,139 @@
+---
+title: "Biostats Wk 3"
+author: "MARIAH"
+date: "2026-09-12"
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+**Research hypothesis:** At least one of the six variables have an effect on wheat yield, and these variables can be used to predict wheat yield.
+
+The response variable is yield (y), it is numerical and continuous. The variables winter plants , mean number of ears, Soil pH, (phosphorus)p, (potassium)k, (magnesium)mg are numerical, contuinous, and focal predictor variables. There are no covariates.
+
+```{r}
+library(ggplot2)
+wheat <- read.csv("~/Desktop/week 2 bio/Datasets/wheat.csv")
+summary(wheat)
+```
+
+```{r}
+#descriptive stats summary
+main<- lm(yield ~ winter+ears+pH+P+K+Mg, data=wheat)
+summary(main)
+```
+
+## Including Plots
+**the residuals are randomly scattered, assumption of homoscedacity is met!**
+```{r ggplot2, echo=FALSE}
+ggplot(main, aes(x = .fitted, y = .resid)) +
+  geom_point() +
+  geom_hline(yintercept = 0)
+```
+
+```{r, echo=FALSE}
+print("visual data exploration for all variables")
+hist(wheat$yield, main = "Yield", xlab = "Yield")
+hist(wheat$winter, main = "Winter plants", xlab = "winter")
+hist(wheat$ears, main = "mean number of ears", xlab = "ears")
+hist(wheat$pH, main = "Soil pH", xlab = "pH")
+hist(wheat$P, main = "Phosphorus", xlab = "P")
+hist(wheat$K, main = "Potassium", xlab = "K")
+hist(wheat$Mg, main = "Magnesium", xlab = "Mg")
+```
+
+```{r, echo=FALSE}
+# Pairwise scatterplots for all variable combinations which include the response.
+plot(wheat$winter, wheat$yield,
+     xlab = "Winter plants",
+     ylab = "Yield",
+     main = "Yield vs Winter pllants")
+
+plot(wheat$ears, wheat$yield,
+     xlab = "Ears ",
+     ylab = "Yield",
+     main = "Yield vs Mean number of Ears")
+
+plot(wheat$pH, wheat$yield,
+     xlab = "Soil pH",
+     ylab = "Yield",
+     main = "Yield vs Soil pH")
+
+plot(wheat$P, wheat$yield,
+     xlab = "Phosphorus",
+     ylab = "Yield",
+     main = "Yield vs Phosphorus")
+
+plot(wheat$K, wheat$yield,
+     xlab = "Potassium",
+     ylab = "Yield",
+     main = "Yield vs Potassium")
+
+plot(wheat$Mg, wheat$yield,
+     xlab = "Magnesium",
+     ylab = "Yield",
+     main = "Yield vs Magnesium")
+```
+
+```{r}
+#boxplots DA
+boxplot(wheat$winter,
+     xlab = "Winter plants",
+     ylab = "Yield",
+     main = "Yield vs Winter plants",
+      col = c("pink"))
+
+boxplot(wheat$ears,
+     xlab = "Ears ",
+     ylab = "Yield",
+     main = "Yield vs Mean number of Ears",
+      col = c("purple"))
+
+boxplot(wheat$pH,
+     xlab = "Soil pH",
+     ylab = "Yield",
+     main = "Yield vs Soil pH",
+      col = c("blue"))
+     
+boxplot(wheat$P,
+     xlab = "Phosphorus",
+     ylab = "Yield",
+     main = "Yield vs Phosphorus",
+      col = c ("yellowgreen"))
+
+boxplot(wheat$K,
+     xlab = "Potassium",
+     ylab = "Yield",
+     main = "Yield vs Potassium",
+      col = c("gold"))
+
+boxplot(wheat$Mg,
+     xlab = "Magnesium",
+     ylab = "Yield",
+     main = "Yield vs Magnesium",
+     col = c("tomato"))
+
+```
+
+```{r}
+# Scatterplot Matrix
+pairs(wheat[, c("yield", "winter", "ears", "pH", "P", "K", "Mg")])
+```
+
+```{r}
+#correlation matrix
+read_w <- cor(wheat[, c("yield", "winter", "ears", "pH", "P", "K", "Mg")], use = "complete.obs")
+pairs(read_w)
+```
+
+#### *Yield vs pH has a outlier in the lower-left of the plot. pH vs P also has two outliers at the top right.* 
+
+#### *Futhermore, I dont see any clear correlation between any pair of variables.*
+
+Thanks!
